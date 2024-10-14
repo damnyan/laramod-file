@@ -19,11 +19,11 @@ class UploadFile implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): string|null
     {
-        if (empty($path)) {
+        if (empty($value)) {
             return null;
         }
 
-        return upload_files()->temporaryUrl($path, now()->addHour());
+        return upload_files()->temporaryUrl($value, now()->addHour());
     }
 
     /**
@@ -37,17 +37,17 @@ class UploadFile implements CastsAttributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): string|null
     {
-        if (empty($path)) {
+        if (empty($value)) {
             return null;
         }
 
         $uploadFiles = upload_files();
 
-        if ($uploadFiles->exists($path)) {
-            return $path;
+        if ($uploadFiles->exists($value)) {
+            return $value;
         }
 
         $action = new MoveTmpToUploadFiles();
-        return $action->handle($path);
+        return $action->handle($value);
     }
 }
